@@ -1,0 +1,8 @@
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\bin\Debug\EbayFetcher.exe.config
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\bin\Debug\EbayFetcher.exe
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\bin\Debug\EbayFetcher.pdb
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\obj\Debug\EbayFetcher.exe
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\obj\Debug\EbayFetcher.pdb
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\obj\Debug\EbayFetcher.csprojResolveAssemblyReference.cache
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\bin\Debug\Newtonsoft.Json.dll
+E:\Visual Studio Projekte\EbayFetcher3\EbayFetcher\EbayFetcher\bin\Debug\Newtonsoft.Json.xml

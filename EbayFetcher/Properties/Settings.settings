@@ -1,0 +1,54 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EbayFetcher.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="EbayFetcher_com_ebay_developer_EbayService_eBayAPIInterfaceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://api.ebay.com/wsapi</Value>
+    </Setting>
+    <Setting Name="EbayFetcher_com_ebay_developer_FindingsService_FindingService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://svcs.ebay.com/services/search/FindingService/v1</Value>
+    </Setting>
+    <Setting Name="appId_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MartinLp-COIN-PRD-e69e2c47f-e1373e76</Value>
+    </Setting>
+    <Setting Name="devId_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1e4ad515-31f3-4ca0-a83f-51ffef6afc90</Value>
+    </Setting>
+    <Setting Name="certId_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PRD-69e2c47f15e1-7f88-4483-9030-8406</Value>
+    </Setting>
+    <Setting Name="token_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AgAAAA**AQAAAA**aAAAAA**EvEGWQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6ACkYunCpCFowSdj6x9nY+seQ**9rYDAA**AAMAAA**f0DtOMfE9IasnUn0kpkDKE1ECcJGEDBtSTQQZEHI8csQ4FoTQ7jvTy2RDgE0zG5I8dJochUfcvaUWofSxGZYofESmD80vx8FmIZlBTZrtMlB0Q/GBnmejXsqTNJe6RYSn9AGSMBjrWBQOEaNlDBSAZvlshjSN0+On5vEKs5OOuddp0QpWy8qX75Fbg/HNYCOi/No1guwFIgCxHu0rR9jQ0YY1BAmvmw2WZ4IrRK0zisDdIKh4PicnjAfBP7R4OX8bEODaU0Pv4mPFSu5XUBc2KrLZK6Ny4owBQAe5DLLUoNI4haLxAQphbCQbttTqiNREevOPSezF38H7twIyOawuYPAMWAsl4FRxF7OXqwRaFYP/5stL0Ay4m4FSyLaR03OWqqVZeLhOcHJROoY67P75tw7W5QoGLfUXHvaq1FOQ3yZhBdDLwzYcpWOUT5dVDDNHMBMPiymX85VOEN4qrtZs3MeuPiMvUZ/A2Ka+CytN6fEYNLDwQxVoxSt9lm88wEEmMbNjVQZCtUCk64S/sKAjEQ7aYDOLvU8xMXZa3Nj5gXlR3UKLKnR/MiHF8ut2OPqGxyP22kvyov/LM6IyU84e0zuBMGLIOqlTWrW4wmuEHPHwNKmLdhihcLWX0VYXZZEI0Z09NMGCGFbhRvy939vQDa2lGtL6/NY7q9kSPCEgYtbKuQwOGDpx+D2eM3H/4msEwtdnnOVTZnG951gdlAQPjzvURnSdCZ18ccvRQ6JROM3eY186D6MZQmIVWlw4P4o</Value>
+    </Setting>
+    <Setting Name="appId_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MartinLp-COIN-SBX-2090fc79c-348d53e3</Value>
+    </Setting>
+    <Setting Name="devId_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1e4ad515-31f3-4ca0-a83f-51ffef6afc90</Value>
+    </Setting>
+    <Setting Name="certId_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PRD-69e2c47f15e1-7f88-4483-9030-8406</Value>
+    </Setting>
+    <Setting Name="token_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AgAAAA**AQAAAA**aAAAAA**0/4GWQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4GlAJeEowSdj6x9nY+seQ**qC0EAA**AAMAAA**ppggXK5HtvVSu70qVkF9dmUAk2530IjRZshROTBhVE8R0cw/yMld9mdQ33Pil0+jf4Lc7yi7E0e5YOIGYZO4IOUrJM8axAAGaekYFTEMc0AcjgR9/nOliKpRndsS+vrYkdxCp1fq1tMXWYYuieyoWV0q7W8pu0My33KqMuj13l3WWmQ++8/tk5qism7H/Qrws+IsHMkVfuOOtXq3XVAuBzlj0Sv4kGntslIJtQZcoiwF7eBMPvjqF9jYqELYTpuQUB5T6s9zvLDUDxjjsT77vU/PtFyGhSv3xNnhwzxnUxPKbnY4tUJ5g+WMIq+FdkO9O2VRQAV1zXcKTh+PleDjukpS1NOCpARmch9DU7XBapQoeIj1GFe/79P/8oSG3ILbvp20rr6B8SMVN1L98awbSxH+LKlLWEEGzmHgU0ebJBqd+eFRZKnwP/AvIkurC1YMbvFzNMo0+eJQkaFwmFHMME7oTQL9HrWkQa86tMc/x1X+fVHYciaf6geUF/9thlF/NPDl+ASP4MUEHzLxGN/5N2u9g3ougAOw3+Iq/sn1zJtPr4Lyy9lYDhQv+izVDPVMEknLw9h36qe4LgtofX/3BVla1ULs5PL21ASaLRVz17rklk8BnuMJm+Uub1W/Ys16Xt1OlMwMgi3wIomRWJE0vDKFidrZ6gy2YppxzwmzrndP33yHroNof89xtjtqVE7p8p1XPnoVrN7gvVWssVeCErRNVSaf7DFl7YGGlZH0pRwypclE25x4vxfOxtHISApe</Value>
+    </Setting>
+    <Setting Name="endPoint_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://api.ebay.com/wsapi</Value>
+    </Setting>
+    <Setting Name="endPoint_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://api.sandbox.ebay.com/wsapi</Value>
+    </Setting>
+    <Setting Name="idVirtualReality_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">183067</Value>
+    </Setting>
+    <Setting Name="idVirtualReality_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">183067</Value>
+    </Setting>
+    <Setting Name="urlFindings_prod" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://svcs.ebay.com/services/search/FindingService/v1</Value>
+    </Setting>
+    <Setting Name="urlFindings_sandbox" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://svcs.sandbox.ebay.com/services/search/FindingService/v1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
