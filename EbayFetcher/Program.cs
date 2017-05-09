@@ -31,7 +31,7 @@ namespace EbayFetcher
                 }
             );
 
-            var ebayFetcher = new EbayFetcher();
+            var ebayFetcher = new FetcherService.EbayFetcher();
             var results = ebayFetcher.FetchResults();
 
             // Console Output

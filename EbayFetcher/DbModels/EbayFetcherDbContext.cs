@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EbayFetcher.com.ebay.developer.FindingsService;
-using EbayFetcher.DbModels;
+﻿using EbayFetcher.DbModels;
 using Microsoft.EntityFrameworkCore;
 using MySQL.Data.EntityFrameworkCore.Extensions;
 

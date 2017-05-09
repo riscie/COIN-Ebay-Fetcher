@@ -1,6 +1,6 @@
 ﻿using EbayFetcher.com.ebay.developer.EbayService;
 
-namespace EbayFetcher
+namespace EbayFetcher.FetcherService
 {
     public class EbayConnector
     {

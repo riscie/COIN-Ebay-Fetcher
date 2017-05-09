@@ -2,7 +2,7 @@
 using System.Linq;
 using EbayFetcher.com.ebay.developer.FindingsService;
 
-namespace EbayFetcher
+namespace EbayFetcher.FetcherService
 {
     internal class EbayFetcher
     {

@@ -2,7 +2,7 @@
 using System.Net;
 using EbayFetcher.com.ebay.developer.FindingsService;
 
-namespace EbayFetcher
+namespace EbayFetcher.FetcherService
 {
     public class CustomFindingService : FindingService
     {

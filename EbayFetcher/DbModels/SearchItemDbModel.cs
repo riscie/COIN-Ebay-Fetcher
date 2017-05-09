@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EbayFetcher.com.ebay.developer.FindingsService;
+﻿using System.ComponentModel.DataAnnotations;
 using EbayFetcher.DbModels;
 
 namespace EbayFetcher
