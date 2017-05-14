@@ -32,6 +32,8 @@ namespace EbayFetcher
 
         public ListingInfoDbModel ListingInfo { get; set; }
 
+        public SellingStatusDbModel SellingStatus { get; set; }
+
         public ConditionDbModel Condition { get; set; }
     }
 }
