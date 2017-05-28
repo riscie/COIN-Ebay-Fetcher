@@ -12,7 +12,7 @@ namespace EbayFetcher
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseMySQL(@"server=localhost;userid=root;pwd=;port=3306;database=coin_db;sslmode=none;");
+//            optionsBuilder.UseMySQL(@"server=localhost;userid=root;pwd=;port=3306;database=coin_db;sslmode=none;");
             optionsBuilder.UseMySQL(@"server=46.101.252.74;userid=coin;pwd=coinPw;port=3310;database=coin_db;sslmode=none;");
         }
     }

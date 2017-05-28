@@ -6,6 +6,8 @@ using AutoMapper;
 using EbayFetcher.com.ebay.developer.FindingsService;
 using EbayFetcher.DbModels;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Slack;
 using Newtonsoft.Json;
 
 namespace EbayFetcher
@@ -31,23 +33,33 @@ namespace EbayFetcher
                         .ForMember(dest => dest.ConvertedBuyItNowPrice, opt => opt.MapFrom(source => source.convertedBuyItNowPrice.Value));
                     cfg.CreateMap<Condition, ConditionDbModel>();
                     cfg.CreateMap<SellingStatus, SellingStatusDbModel>()
-                    .ForMember(dest => dest.BidCount, opt => opt.MapFrom(source => source.bidCountSpecified ? source.bidCount : -1))
-                    .ForMember(dest => dest.CurrentPrice, opt => opt.MapFrom(source => source.currentPrice.Value))
-                    .ForMember(dest => dest.SellingState, opt => opt.MapFrom(source => source.sellingState));
+                        .ForMember(dest => dest.BidCount, opt => opt.MapFrom(source => source.bidCountSpecified ? source.bidCount : -1))
+                        .ForMember(dest => dest.CurrentPrice, opt => opt.MapFrom(source => source.currentPrice.Value))
+                        .ForMember(dest => dest.SellingState, opt => opt.MapFrom(source => source.sellingState));
                 }
             );
 
-            var ebayFetcher = new FetcherService.EbayFetcher();
-            var results = ebayFetcher.FetchResults();
-
-            // Console Output
-            foreach (var item in results)
+            //Setup Logging
+            var slackConfig = new SlackConfiguration()
             {
-                Console.WriteLine("Item found: " + item.itemId + " title: " + item.title);
-            }
+                WebhookUrl = new Uri("https://hooks.slack.com/services/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"),
+                MinLevel = LogLevel.Information
+            };
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddSlack(slackConfig, "Ebay Fetcher", "Production");
+            var logger = loggerFactory.CreateLogger("Ebay Fetcher");
+
+
+            // Fetch Items
+            logger.LogInformation("Started fetching...");
+            var ebayFetcher = new FetcherService.EbayFetcher();
+            var results = ebayFetcher.FetchResults().ToList();
+            logger.LogInformation($"Fetched {results.Count} items...");
+
 
             // JSON File Output
             File.WriteAllText(@"C:\temp\Items_" + DateTime.Now.ToFileTimeUtc() + ".json", JsonConvert.SerializeObject(results));
+
 
             // Get Numbers of interested people only from auctions and aren't finished yet
             var interestedsOfSearchItem = new Dictionary<string, int>();
@@ -61,6 +73,7 @@ namespace EbayFetcher
                 interestedsOfSearchItem.Add(item.itemId, interested);
             }
 
+
             // DB Output
             using (var context = new EbayFetcherDbContext())
             {
@@ -70,9 +83,28 @@ namespace EbayFetcher
                 // Set number of interested in model, where existing
                 foreach (var searchItem in mappedSearchItems.Where(si => interestedsOfSearchItem.ContainsKey(si.ItemId.ToString()))) searchItem.SellingStatus.InterestCount = interestedsOfSearchItem[searchItem.ItemId.ToString()];
 
+                //Get current entries from DB
+                var updateCount = 0;
+                var newCount = 0;
+                foreach (var searchItem in mappedSearchItems)
+                {
+                    var itemToUpdate = context.SearchItems.FirstOrDefault(i => i.ItemId == searchItem.ItemId);
+                    if (itemToUpdate != null)
+                    {
+                        var updatedItem = Mapper.Map(itemToUpdate, searchItem);
+                        context.SearchItems.Update(updatedItem);
+                        updateCount++;
+                    }
+                    else
+                    {
+                        context.Add(searchItem);
+                        newCount++;
+                    }
+                }
+
                 // Save fields
-                context.SearchItems.AddRange(mappedSearchItems);
                 context.SaveChanges();
+                logger.LogInformation($"Created {newCount} new entries. / Updated {updateCount} entries in the db...");
             }
         }
     }
