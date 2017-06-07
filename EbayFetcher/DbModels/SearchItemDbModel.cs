@@ -35,5 +35,7 @@ namespace EbayFetcher
         public SellingStatusDbModel SellingStatus { get; set; }
 
         public ConditionDbModel Condition { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     }
 }

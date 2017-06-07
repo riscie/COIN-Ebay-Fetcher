@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using EbayFetcher.com.ebay.developer.FindingsService;
 using EbayFetcher.DbModels;
@@ -50,62 +51,104 @@ namespace EbayFetcher
             var logger = loggerFactory.CreateLogger("Ebay Fetcher");
 
 
-            // Fetch Items
-            logger.LogInformation("Started fetching...");
-            var ebayFetcher = new FetcherService.EbayFetcher();
-            var results = ebayFetcher.FetchResults().ToList();
-            logger.LogInformation($"Fetched {results.Count} items...");
-
-
-            // JSON File Output
-            File.WriteAllText(@"C:\temp\Items_" + DateTime.Now.ToFileTimeUtc() + ".json", JsonConvert.SerializeObject(results));
-
-
-            // Get Numbers of interested people only from auctions and aren't finished yet
-            var interestedsOfSearchItem = new Dictionary<string, int>();
-            foreach (var item in results.Where(i => (i.listingInfo.listingType == "Auction" || i.listingInfo.listingType == "AuctionWithBIN") && i.sellingStatus.sellingState == "Active"))
+//            // Fetch Items
+            try
             {
-                var web = new HtmlWeb();
-                var document = web.Load(item.viewItemURL);
-                var interestedNode = document.DocumentNode.SelectSingleNode("//span[@class='vi-buybox-watchcount']");
-                if (interestedNode == null) continue;
-                var interested = string.IsNullOrEmpty(interestedNode.InnerText) ? -1 : Int32.Parse(interestedNode.InnerText);
-                interestedsOfSearchItem.Add(item.itemId, interested);
-            }
+                var ebayFetcher = new FetcherService.EbayFetcher();
+                var results = ebayFetcher.FetchResults().ToList();
 
-
-            // DB Output
-            using (var context = new EbayFetcherDbContext())
-            {
-                context.Database.EnsureCreated();
-                var mappedSearchItems = Mapper.Map<IEnumerable<SearchItem>, IEnumerable<SearchItemDbObject>>(results);
-
-                // Set number of interested in model, where existing
-                foreach (var searchItem in mappedSearchItems.Where(si => interestedsOfSearchItem.ContainsKey(si.ItemId.ToString()))) searchItem.SellingStatus.InterestCount = interestedsOfSearchItem[searchItem.ItemId.ToString()];
-
-                //Get current entries from DB
-                var updateCount = 0;
-                var newCount = 0;
-                foreach (var searchItem in mappedSearchItems)
+                // Get Numbers of interested people only from auctions and aren't finished yet
+                var interestedsOfSearchItem = new Dictionary<string, int>();
+                foreach (var item in results.Where(i => (i.listingInfo.listingType == "Auction" || i.listingInfo.listingType == "AuctionWithBIN") && i.sellingStatus.sellingState == "Active"))
                 {
-                    var itemToUpdate = context.SearchItems.FirstOrDefault(i => i.ItemId == searchItem.ItemId);
-                    if (itemToUpdate != null)
-                    {
-                        var updatedItem = Mapper.Map(itemToUpdate, searchItem);
-                        context.SearchItems.Update(updatedItem);
-                        updateCount++;
-                    }
-                    else
-                    {
-                        context.Add(searchItem);
-                        newCount++;
-                    }
+                    var web = new HtmlWeb();
+                    var document = web.Load(item.viewItemURL);
+                    var interestedNode = document.DocumentNode.SelectSingleNode("//span[@class='vi-buybox-watchcount']");
+                    if (interestedNode == null) continue;
+                    var interested = string.IsNullOrEmpty(interestedNode.InnerText) ? -1 : Int32.Parse(interestedNode.InnerText);
+                    interestedsOfSearchItem.Add(item.itemId, interested);
                 }
 
-                // Save fields
-                context.SaveChanges();
-                logger.LogInformation($"Created {newCount} new entries. / Updated {updateCount} entries in the db...");
+
+                // DB Output
+                using (var context = new EbayFetcherDbContext())
+                {
+                    context.Database.EnsureCreated();
+                    var mappedSearchItems = Mapper.Map<IEnumerable<SearchItem>, IEnumerable<SearchItemDbObject>>(results).ToList();
+
+                    // Set number of interested in model, where existing
+                    foreach (var searchItem in mappedSearchItems.Where(si => interestedsOfSearchItem.ContainsKey(si.ItemId.ToString()))) searchItem.SellingStatus.InterestCount = interestedsOfSearchItem[searchItem.ItemId.ToString()];
+
+                    //Get current entries from DB
+                    var updateCount = 0;
+                    var newCount = 0;
+                    foreach (var searchItem in mappedSearchItems)
+                    {
+                        var itemToUpdate = context.SearchItems.FirstOrDefault(i => i.ItemId == searchItem.ItemId);
+                        if (itemToUpdate != null)
+                        {
+                            var updatedItem = Mapper.Map(itemToUpdate, searchItem);
+                            context.SearchItems.Update(updatedItem);
+                            updateCount++;
+                        }
+                        else
+                        {
+                            context.Add(searchItem);
+                            newCount++;
+                        }
+                    }
+                    // Save fields
+                    context.SaveChanges();
+                    logger.LogInformation($"Created {newCount} new entries. / Updated {updateCount} entries in the db...");
+                }
             }
+            catch (Exception e)
+
+            {
+                Console.WriteLine(e.Message);
+                logger.LogError("Error Fetching items... please investigate.");
+                Console.ReadKey();
+            }
+
+            List<SearchItemDbObject> itemsToFetchGpsLocations;
+            using (var context = new EbayFetcherDbContext())
+            {
+                itemsToFetchGpsLocations = context.SearchItems.Where(s => s.Longitude == null && s.Latitude == null && s.PostalCode != null).ToList();
+            }
+            var locCount = 0;
+            foreach (var item in itemsToFetchGpsLocations)
+            {
+                using (var wc = new WebClient())
+                {
+                    if (locCount % 10 == 0)
+                    {
+                        Console.WriteLine(locCount);
+                    }
+                    try
+                    {
+                        using (var context = new EbayFetcherDbContext())
+                        {
+                            var json = wc.DownloadString($"https://maps.googleapis.com/maps/api/geocode/json?address={item.PostalCode}+{item.Location}+{item.Country}&key=AIzaSyDlVUkkbAyjj_Xxr9OoLtD8uflgJVGyJ98");
+                            var deserializedLocation = JsonConvert.DeserializeObject<RootLocationObject>(json);
+                            var lat = deserializedLocation.results.FirstOrDefault();
+                            item.Latitude = lat?.geometry.location.lat.ToString(CultureInfo.InvariantCulture) ?? "";
+                            var lng = deserializedLocation.results.FirstOrDefault();
+                            item.Longitude = lng?.geometry.location.lng.ToString(CultureInfo.InvariantCulture) ?? "";
+                            locCount++;
+                            context.SearchItems.Update(item);
+                            context.SaveChanges();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error fetching locations: " + e.Message);
+                    }
+                }
+            }
+
+            // Save Location Updates
+            Console.WriteLine($"Updated Longitude / Latitude on  {itemsToFetchGpsLocations.Count()} items.");
+            logger.LogInformation($"Updated Longitude / Latitude on {locCount} items.");
         }
     }
 }

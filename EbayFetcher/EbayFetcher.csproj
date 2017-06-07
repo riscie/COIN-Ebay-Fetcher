@@ -153,6 +153,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbModels\Location.cs" />
     <Compile Include="DbModels\SellingStatusDbModel.cs" />
     <Compile Include="FetcherService\CustomFindingService.cs" />
     <Compile Include="DbModels\ConditionDbModel.cs" />
